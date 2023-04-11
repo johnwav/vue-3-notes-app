@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import logo from './assets/logo.svg'
 
 const showModal = ref(false)
 const text = ref('')
@@ -28,23 +29,19 @@ const addNote = () => {
 
 }
 
-
 </script>
 
 <template>
   <main>
-
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <textarea v-model.trim="text" onsubmit="handlesubmit" name="note" id="note" cols="30" rows="10">
-
-            </textarea>
+                  </textarea>
         <p v-if="errorMsg">{{ errorMsg }}</p>
         <button @click="addNote">Add Note</button>
         <button @click="showModal = false" class="close">Close</button>
       </div>
     </div>
-
     <div class="container">
       <header>
         <h1>Notes</h1>
@@ -57,10 +54,7 @@ const addNote = () => {
             {{ note.date.toLocaleDateString(en - US) }}
           </p>
         </div>
-
       </div>
-
-
     </div>
   </main>
 </template>
