@@ -1,20 +1,16 @@
 <script setup>
-import { ref } from 'vue'
-import logo from './assets/logo.svg'
+import { onMounted, ref } from 'vue'
 
 const showModal = ref(false)
 const text = ref('')
 const errorMsg = ref(false)
 const notes = ref([])
 
-
 const getRandomColor = () => {
   let color = "hsl(" + Math.random() * 360 + ", 100%, 75%)";
   return color;
 }
-
 const addNote = () => {
-
   if (note.value.length < 10) {
     return errorMsg.value = 'Please enter a note'
   }
@@ -26,11 +22,13 @@ const addNote = () => {
   })
   showModal.value = false
   text.value = ""
-
 }
 
-</script>
+onMounted(()=> {
+  text.value.focus()
+})
 
+</script>
 <template>
   <main>
     <div v-if="showModal" class="overlay">
@@ -59,31 +57,26 @@ const addNote = () => {
   </main>
 </template>
 
-
 <style scoped>
 main {
   height: 100vh;
   width: 100vw;
 }
-
 .container {
   max-width: 1000px;
   padding: 10px;
   margin: 0 auto;
 }
-
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 h1 {
   font-weight: bold;
   margin-bottom: 25px;
   font-size: 75px;
 }
-
 header button {
   border: none;
   padding: 10px;
