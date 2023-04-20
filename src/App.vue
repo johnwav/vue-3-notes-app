@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const showModal = ref(false)
 const text = ref('')
@@ -12,7 +12,7 @@ const getRandomColor = () => {
 }
 const addNote = () => {
   if (note.value.length < 10) {
-    return errorMsg.value = 'Please enter a note'
+    return errorMsg.value = 'Please enter a longer note'
   }
   notes.value.push({
     text: text.value,
@@ -22,10 +22,17 @@ const addNote = () => {
   })
   showModal.value = false
   text.value = ""
+  errorMsg.value = null
+
 }
 
-onMounted(()=> {
-  text.value.focus()
+watch(notes, (newValue) => {
+  localStorage.setItem('notes', JSON.stringify(newValue))
+}, { deep: true })
+
+onMounted(() => {
+  text.value && text.value.focus()
+  notes.value = JSON.parse(localStorage.getItem('notes')) || []
 })
 
 </script>
@@ -45,11 +52,11 @@ onMounted(()=> {
         <h1>Notes</h1>
         <button @click="showModal = true">+</button>
       </header>
-      <div class=" cards-container">
+      <div class=" cards-container" v-if="notes">
         <div v-for="(note) in notes" :key="note.id" class="card" :style="{ backgroundColor: note.color }">
           <p class="main-text">{{ note.text }}</p>
           <p class="date">
-            {{ note.date.toLocaleDateString(en - US) }}
+            {{ note.date.toLocaleString() }}
           </p>
         </div>
       </div>
@@ -62,21 +69,25 @@ main {
   height: 100vh;
   width: 100vw;
 }
+
 .container {
   max-width: 1000px;
   padding: 10px;
   margin: 0 auto;
 }
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 h1 {
   font-weight: bold;
   margin-bottom: 25px;
   font-size: 75px;
 }
+
 header button {
   border: none;
   padding: 10px;
